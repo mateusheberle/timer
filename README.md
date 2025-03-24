@@ -2,9 +2,11 @@
 
 **Timer** é um aplicativo de temporizador baseado na técnica Pomodoro, com uma interface moderna e imersiva. Desenvolvido com **Flutter**, ele te ajuda a otimizar seu tempo com ciclos de foco e pausas personalizadas.
 
-![Tela de abertura](screenshots/1.jpeg)
-![Temporizador ativo](screenshots/3.jpeg)
-![Modo foco](screenshots/2.jpeg)
+<p align="center">
+  <img src="screenshots/1.jpeg" width="200"/>
+  <img src="screenshots/3.jpeg" width="200"/>
+  <img src="screenshots/2.jpeg" width="200"/>
+</p>
 
 ---
 
