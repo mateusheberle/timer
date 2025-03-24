@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:timer_alura/components/button.dart';
 import 'package:timer_alura/consts.dart';
+import 'package:just_audio/just_audio.dart';
 
 class TemporizadorTela extends StatefulWidget {
   const TemporizadorTela({super.key});
@@ -16,6 +17,7 @@ class _TemporizadorTelaState extends State<TemporizadorTela> {
   int _tempoRestante = 1500; // em segundos (25 minutos)
   Timer? _timer;
   bool _ativo = false;
+  bool _zerou = false;
 
   void _selecionarCategoria(int index) {
     setState(() {
@@ -38,7 +40,10 @@ class _TemporizadorTelaState extends State<TemporizadorTela> {
           _tempoRestante--;
         });
       } else {
+        print('Tempo esgotado!');
         _pararTimer();
+        _zerou = true;
+        _somAlarme(true);
       }
     });
   }
@@ -55,6 +60,7 @@ class _TemporizadorTelaState extends State<TemporizadorTela> {
     setState(() {
       _tempoRestante = tempos[selecionado];
       _ativo = false;
+      _zerou = false;
     });
   }
 
@@ -63,6 +69,17 @@ class _TemporizadorTelaState extends State<TemporizadorTela> {
     setState(() {
       _ativo = false;
     });
+  }
+
+  void _somAlarme(bool isAlarme) async {
+    final player = AudioPlayer();
+    await player.setAsset('assets/Sons/Beep.mp3');
+    if (isAlarme) {
+      player.play();
+    } else {
+      player.stop();
+      _resetarTimer();
+    }
   }
 
   String _formatarTempo(int segundos) {
@@ -145,9 +162,24 @@ class _TemporizadorTelaState extends State<TemporizadorTela> {
               ),
             ),
             Button(
-              text: _ativo ? 'Pause' : 'Play',
-              icon: _ativo ? Icons.pause : Icons.play_arrow,
-              onTap: _ativo ? _pausarTimer : _iniciarTimer,
+              text:
+                  _zerou
+                      ? 'Restart'
+                      : _ativo
+                      ? 'Pause'
+                      : 'Play',
+              icon:
+                  _zerou
+                      ? Icons.restart_alt
+                      : _ativo
+                      ? Icons.pause
+                      : Icons.play_arrow,
+              onTap:
+                  _zerou
+                      ? () => _somAlarme(false)
+                      : _ativo
+                      ? _pausarTimer
+                      : _iniciarTimer,
             ),
           ],
         ),
